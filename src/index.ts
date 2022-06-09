@@ -5,17 +5,25 @@ class Ball {
   y: number;
   vx: number;
   vy: number;
+  windowSize: number;
 
-  constructor(init_x: number, init_y: number) {
+  constructor(init_x: number, init_y: number, windowSize: number) {
     this.x = init_x;
     this.y = init_y;
-    this.vx = 1;
+    this.vx = 2;
     this.vy = 1;
+    this.windowSize = windowSize;
   }
 
   frameChamge() {
     this.x += this.vx;
     this.y += this.vy;
+    if(this.x < 10 || this.x > this.windowSize - 10) {
+      this.vx *= -1;
+    }
+    if(this.y < 10 || this.y > this.windowSize - 10) {
+      this.vy *= -1;
+    }
   }
 }
 
@@ -33,7 +41,7 @@ class GameObject {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.windowSize = 1000;
-    this.ball = new Ball(100, 100);
+    this.ball = new Ball(100, 100, this.windowSize);
     this.fps = 60;
   }
 
