@@ -6,6 +6,8 @@ class Ball {
   vx: number;
   vy: number;
   windowSize: number;
+  ballSize: number
+  image: HTMLImageElement;
 
   constructor(init_x: number, init_y: number, windowSize: number) {
     this.x = init_x;
@@ -13,6 +15,9 @@ class Ball {
     this.vx = 5;
     this.vy = 2;
     this.windowSize = windowSize;
+    this.ballSize = 20;
+    this.image = new Image();
+    this.image.src = './img/ball.png';
   }
 
   frameChamge() {
@@ -25,6 +30,11 @@ class Ball {
     this.x += this.vx;
     this.y += this.vy;
   }
+
+  draw(ctx: any) {
+    ctx.drawImage(this.image, 0, 0, this.ballSize, this.ballSize, this.x - (this.ballSize/2), this.y - (this.ballSize/2), this.ballSize, this.ballSize);
+  }
+
 }
 
 class GameObject {
@@ -57,10 +67,11 @@ class GameObject {
   draw() {
     this.ctx.clearRect(0, 0, this.windowSize, this.windowSize);
     this.ctx.beginPath();
-    this.ctx.drawImage(this.backgroundImage, 0, 0, this.windowSize, this.windowSize, 0, 0, this.windowSize, this.windowSize)
-    this.ctx.arc( this.ball.x, this.ball.y, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false ) ;
-    this.ctx.fillStyle = "rgba(255,0,0,0.8)" ;
-    this.ctx.fill() ;
+    this.ctx.drawImage(this.backgroundImage, 0, 0, this.windowSize, this.windowSize, 0, 0, this.windowSize, this.windowSize);
+    this.ball.draw(this.ctx);
+    // this.ctx.arc( this.ball.x, this.ball.y, 10, 0 * Math.PI / 180, 360 * Math.PI / 180, false ) ;
+    // this.ctx.fillStyle = "rgba(255,0,0,0.8)" ;
+    // this.ctx.fill() ;
   }
 
   start() {
