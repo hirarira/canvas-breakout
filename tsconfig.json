@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "./js",
+    "target": "es5",
+    "module": "es2015",
+    "esModuleInterop": true,
+ 
+  },
+  "include": [
+    "./src/**/*.ts"
+  ]
+}

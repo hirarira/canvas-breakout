@@ -1,0 +1,39 @@
+#main {
+  text-align: center;
+  margin: auto;
+  width: 800px;
+}
+
+#title {
+  font-size: 48px;
+  margin: 20px;
+}
+
+#count {
+  font-size: 24px;
+  background: #ccc;
+  border-radius: 10px;
+  margin: 0px 10px;
+}
+
+#status {
+  font-size: 24px;
+  background: #ccc;
+  border-radius: 10px;
+  margin: 0px 10px;
+}
+
+#restart {
+  margin-top: 10px
+}
+
+.thumbnail {
+  width: 10vw;
+  height: 10vw;
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.thumbnailArea {
+  margin-top: 20px;
+}
