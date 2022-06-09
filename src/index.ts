@@ -44,13 +44,21 @@ class Bar {
 
   constructor() {
     this.x = 300;
-    this.y = 750;
+    this.y = 720;
     this.image = new Image();
     this.image.src = './img/bar.png';
   }
 
   draw(ctx: any) {
     ctx.drawImage(this.image, 0, 0, 200, 30, this.x, this.y, 200, 30);
+  }
+
+  moveRight() {
+    this.x += 10;
+  }
+
+  moveLeft() {
+    this.x -= 10;
   }
 
 }
@@ -79,7 +87,6 @@ class GameObject {
   }
 
   frame() {
-    console.log(this.windowSize);
     this.ball.frameChamge();
     this.draw();
   }
@@ -93,13 +100,22 @@ class GameObject {
   }
 
   start() {
-    console.log("start");
     this.timerID = setInterval(this.frame.bind(this), (1000/this.fps));
   }
-
 }
 
-window.onload = () => {
+window.onload = async () => {
   const gameObjet = new GameObject();
   gameObjet.start();
+  window.addEventListener("keydown", async (evt) => {
+    console.log(evt);
+    switch(evt.key) {
+      case 'ArrowRight':
+        gameObjet.bar.moveRight();
+        break;
+      case 'ArrowLeft':
+        gameObjet.bar.moveLeft();
+        break;
+    }
+  });
 }
