@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "outDir": "./js",
-    "target": "es5",
-    "module": "es2015",
+    "target": "es2021",
+    "module": "es2020",
     "esModuleInterop": true,
  
   },
