@@ -73,6 +73,10 @@ class GameObject {
   timerID: any;
   fps: number;
   backgroundImage: HTMLImageElement;
+  keyStatus: {
+    isLeftUp: boolean,
+    isRightUp: boolean
+  }
 
   constructor() {
     const canvas: any = document.getElementById('canvas');
@@ -84,10 +88,20 @@ class GameObject {
     this.fps = 60;
     this.backgroundImage = new Image();
     this.backgroundImage.src = './img/sea.jpg';
+    this.keyStatus = {
+      isLeftUp: false,
+      isRightUp: false
+    }
   }
 
   frame() {
     this.ball.frameChamge();
+    if(this.keyStatus.isRightUp) {
+      this.bar.moveRight();
+    }
+    if(this.keyStatus.isLeftUp) {
+      this.bar.moveLeft();
+    }
     this.draw();
   }
 
@@ -108,13 +122,22 @@ window.onload = async () => {
   const gameObjet = new GameObject();
   gameObjet.start();
   window.addEventListener("keydown", async (evt) => {
-    console.log(evt);
     switch(evt.key) {
       case 'ArrowRight':
-        gameObjet.bar.moveRight();
+        gameObjet.keyStatus.isRightUp = true;
         break;
       case 'ArrowLeft':
-        gameObjet.bar.moveLeft();
+        gameObjet.keyStatus.isLeftUp = true;
+        break;
+    }
+  });
+  window.addEventListener("keyup", async (evt) => {
+    switch(evt.key) {
+      case 'ArrowRight':
+        gameObjet.keyStatus.isRightUp = false;
+        break;
+      case 'ArrowLeft':
+        gameObjet.keyStatus.isLeftUp = false;
         break;
     }
   });
