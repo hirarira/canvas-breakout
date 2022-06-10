@@ -41,24 +41,32 @@ class Bar {
   y: number;
   ballSize: number;
   image: HTMLImageElement;
+  windowSize: number;
+  barWidth: number
 
-  constructor() {
+  constructor(windowSize: number) {
     this.x = 300;
     this.y = 720;
+    this.barWidth = 200;
+    this.windowSize = windowSize;
     this.image = new Image();
     this.image.src = './img/bar.png';
   }
 
   draw(ctx: any) {
-    ctx.drawImage(this.image, 0, 0, 200, 30, this.x, this.y, 200, 30);
+    ctx.drawImage(this.image, 0, 0, this.barWidth, 30, this.x, this.y, this.barWidth, 30);
   }
 
   moveRight() {
-    this.x += 10;
+    if(this.x < (this.windowSize - this.barWidth)) {
+      this.x += 10;
+    }
   }
 
   moveLeft() {
-    this.x -= 10;
+    if(this.x > 0) {
+      this.x -= 10;
+    }
   }
 
 }
@@ -84,7 +92,7 @@ class GameObject {
     this.ctx = canvas.getContext('2d');
     this.windowSize = 800;
     this.ball = new Ball(100, 100, this.windowSize);
-    this.bar = new Bar();
+    this.bar = new Bar(this.windowSize);
     this.fps = 60;
     this.backgroundImage = new Image();
     this.backgroundImage.src = './img/sea.jpg';
