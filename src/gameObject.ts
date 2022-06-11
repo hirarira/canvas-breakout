@@ -126,7 +126,7 @@ class GameObject {
       this.ballStock--;
       this.setBallNum();
       this.balls.push(
-        new Ball(this.bar.x, this.bar.y, this.windowSize)
+        new Ball(this.bar.x + (this.bar.barWidth / 2), this.bar.y, this.windowSize)
       )
     }
   }
