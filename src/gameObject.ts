@@ -5,11 +5,10 @@ import Block from "./block";
 type GameStatus = 'title' | 'playing' | 'gameover';
 
 class GameObject {
-  canvas: HTMLElement;
   ctx: any;
   /** 画面の解像度 */
   windowSize: number;
-  ball: Ball;
+  balls: Ball[];
   bar: Bar;
   timerID: any;
   fps: number;
@@ -23,17 +22,19 @@ class GameObject {
   blocks: Block[];
   gameStatus: GameStatus;
   htmlElements: {
+    canvas: HTMLElement
     status: HTMLElement,
-    score: HTMLElement
+    score: HTMLElement,
+    ballNum: HTMLElement
   }
   score: number;
+  ballStock: number;
 
   constructor() {
     const canvas: any = document.getElementById('canvas');
-    this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.windowSize = 800;
-    this.ball = new Ball(0, 0, this.windowSize);
+    this.balls = [];
     this.bar = new Bar(this.windowSize);
     this.fps = 60;
     this.backgroundImage = new Image();
@@ -46,24 +47,41 @@ class GameObject {
     },
     this.htmlElements = {
       status: document.getElementById('status'),
-      score: document.getElementById('score')
+      score: document.getElementById('score'),
+      ballNum: document.getElementById('ball_num'),
+      canvas: canvas
     }
     this.blocks = [];
     this.gameStatus = 'title';
     this.score = 0;
+    this.ballStock = 0;
   }
 
-  setStatus(str: string) {
-    this.htmlElements.status.innerHTML = `状況：${str}`
+  setStatus() {
+    const statusStr = (()=>{
+      switch(this.gameStatus) {
+        case 'gameover':
+          return 'ゲームオーバー';
+        case 'playing':
+          return 'プレイ中';
+        case 'title':
+          return 'タイトル';
+      }
+    })()
+    this.htmlElements.status.innerHTML = `状況：${statusStr}`
   }
 
-  setScore(score: number) {
-    this.htmlElements.score.innerHTML = `スコア：${score.toString()}`
+  setScore() {
+    this.htmlElements.score.innerHTML = `スコア：${this.score.toString()}`
+  }
+
+  setBallNum() {
+    this.htmlElements.ballNum.innerHTML = `残り弾：${this.ballStock.toString()}`
   }
 
   addScore() {
     this.score += 100;
-    this.setScore(this.score);
+    this.setScore();
   }
 
   playing() {
@@ -73,33 +91,53 @@ class GameObject {
     if(this.keyStatus.isLeftUp) {
       this.bar.moveLeft();
     }
-    this.ball.frameChamge();
-    this.bar.barToBall(this.ball);
-    this.blocks.forEach((block: Block) => {
-      if(block.isExist) {
-        const isHit = block.blockToBall(this.ball);
-        if(isHit) {
-          this.addScore();
-        }
+    let existBallCount = 0;
+    this.balls.forEach((ball: Ball)=>{
+      ball.frameChamge();
+      this.bar.barToBall(ball);
+      if(ball.isExist) {
+        existBallCount++;
       }
     })
-    if(!this.ball.isExist) {
+    this.blocks.forEach((block: Block) => {
+      if(block.isExist) {
+        this.balls.forEach((ball: Ball)=>{
+          const isHit = block.blockToBall(ball);
+          if(isHit) {
+            this.addScore();
+          }
+        })
+      }
+    })
+    if(existBallCount <= 0 && this.ballStock <= 0) {
       this.gameStatus = 'gameover';
-      this.setStatus('ゲームオーバー');
+      this.setStatus();
     }
     // Escが押されたらタイトルに戻る
     if(this.keyStatus.isEsc) {
       this.gameStatus = 'title';
-      this.setStatus('タイトル');
+      this.setStatus();
     }
     this.playingDraw();
+  }
+
+  shotBall() {
+    if(this.gameStatus === 'playing' && this.ballStock > 0) {
+      this.ballStock--;
+      this.setBallNum();
+      this.balls.push(
+        new Ball(this.bar.x, this.bar.y, this.windowSize)
+      )
+    }
   }
 
   playingDraw() {
     this.ctx.clearRect(0, 0, this.windowSize, this.windowSize);
     this.ctx.beginPath();
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.windowSize, this.windowSize, 0, 0, this.windowSize, this.windowSize);
-    this.ball.draw(this.ctx);
+    this.balls.forEach((ball: Ball)=>{
+      ball.draw(this.ctx);
+    })
     this.bar.draw(this.ctx);
     this.blocks.forEach((block: Block)=>{
       if(block.isExist) {
@@ -110,14 +148,16 @@ class GameObject {
 
   resetGame() {
     // 初期設定
-    this.ball.reset(200, 200);
+    this.balls = [];
     this.bar.reset();
     this.score = 0;
     this.blocks = [];
+    this.ballStock = 5;
     this.gameStatus = 'playing';
-    this.setScore(this.score);
-    this.setStatus('プレイ中');
-    for(let y=0; y<3; y++) {
+    this.setScore();
+    this.setStatus();
+    this.setBallNum();
+    for(let y=0; y<5; y++) {
       for(let x=0; x<10; x++) {
         this.blocks.push(
           new Block(x*80, y*40)

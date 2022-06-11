@@ -17,6 +17,10 @@ window.onload = async () => {
       case 'Escape':
         gameObjet.keyStatus.isEsc = true;
         break;
+      case 'a':
+        // ボールを発射する
+        gameObjet.shotBall();
+        break;
     }
   });
   window.addEventListener("keyup", async (evt) => {
