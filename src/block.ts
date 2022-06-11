@@ -7,6 +7,7 @@ class Block {
   height: number;
   image: HTMLImageElement;
   isExist: boolean;
+
   constructor(x: number, y: number) {
     this.x = x;
     this.y = y;
@@ -16,12 +17,11 @@ class Block {
     this.image = new Image();
     this.image.src = './img/block.png';
   }
-  changeExist() {
-    this.isExist = !this.isExist;
-  }
+
   draw(ctx: any) {
     ctx.drawImage(this.image, 0, 0, this.width, this.height, this.x, this.y, this.width, this.height);
   }
+
   blockToBall(ball: Ball) {
     const isOverX = (ball.x + ball.ballSize) > this.x && ball.x < (this.x + this.width);
     const isOverY = (ball.y + ball.ballSize) > this.y && ball.y < (this.y + this.height);
@@ -33,8 +33,10 @@ class Block {
         ball.y = this.y + this.height;
       }
       ball.vy *= -1;
-      this.changeExist();
+      this.isExist = false;
+      return true;
     }
+    return false;
   }
 }
 

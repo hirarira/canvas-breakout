@@ -22,6 +22,11 @@ class GameObject {
   }
   blocks: Block[];
   gameStatus: GameStatus;
+  htmlElements: {
+    status: HTMLElement,
+    score: HTMLElement
+  }
+  score: number;
 
   constructor() {
     const canvas: any = document.getElementById('canvas');
@@ -38,9 +43,27 @@ class GameObject {
       isRightUp: false,
       isEnter: false,
       isEsc: false
+    },
+    this.htmlElements = {
+      status: document.getElementById('status'),
+      score: document.getElementById('score')
     }
     this.blocks = [];
-    this.gameStatus = 'title'; 
+    this.gameStatus = 'title';
+    this.score = 0;
+  }
+
+  setStatus(str: string) {
+    this.htmlElements.status.innerHTML = `状況：${str}`
+  }
+
+  setScore(score: number) {
+    this.htmlElements.score.innerHTML = `スコア：${score.toString()}`
+  }
+
+  addScore() {
+    this.score += 100;
+    this.setScore(this.score);
   }
 
   playing() {
@@ -54,15 +77,20 @@ class GameObject {
     this.bar.barToBall(this.ball);
     this.blocks.forEach((block: Block) => {
       if(block.isExist) {
-        block.blockToBall(this.ball);
+        const isHit = block.blockToBall(this.ball);
+        if(isHit) {
+          this.addScore();
+        }
       }
     })
     if(!this.ball.isExist) {
       this.gameStatus = 'gameover';
+      this.setStatus('ゲームオーバー');
     }
     // Escが押されたらタイトルに戻る
     if(this.keyStatus.isEsc) {
       this.gameStatus = 'title';
+      this.setStatus('タイトル');
     }
     this.playingDraw();
   }
@@ -84,7 +112,11 @@ class GameObject {
     // 初期設定
     this.ball.reset(200, 200);
     this.bar.reset();
+    this.score = 0;
     this.blocks = [];
+    this.gameStatus = 'playing';
+    this.setScore(this.score);
+    this.setStatus('プレイ中');
     for(let y=0; y<3; y++) {
       for(let x=0; x<10; x++) {
         this.blocks.push(
@@ -103,7 +135,6 @@ class GameObject {
     this.ctx.fillText('Enterで開始', 250, 400);
     if(this.keyStatus.isEnter) {
       this.resetGame();
-      this.gameStatus = 'playing';
     }
   }
 
