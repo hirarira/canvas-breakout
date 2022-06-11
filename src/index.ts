@@ -14,6 +14,9 @@ window.onload = async () => {
       case 'Enter':
         gameObjet.keyStatus.isEnter = true;
         break;
+      case 'Escape':
+        gameObjet.keyStatus.isEsc = true;
+        break;
     }
   });
   window.addEventListener("keyup", async (evt) => {
@@ -26,6 +29,9 @@ window.onload = async () => {
         break;
       case 'Enter':
         gameObjet.keyStatus.isEnter = false;
+        break;
+      case 'Escape':
+        gameObjet.keyStatus.isEsc = false;
         break;
     }
   });

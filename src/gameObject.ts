@@ -17,7 +17,8 @@ class GameObject {
   keyStatus: {
     isLeftUp: boolean,
     isRightUp: boolean,
-    isEnter: boolean
+    isEnter: boolean,
+    isEsc: boolean
   }
   blocks: Block[];
   gameStatus: GameStatus;
@@ -27,7 +28,7 @@ class GameObject {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.windowSize = 800;
-    this.ball = new Ball(200, 200, this.windowSize);
+    this.ball = new Ball(0, 0, this.windowSize);
     this.bar = new Bar(this.windowSize);
     this.fps = 60;
     this.backgroundImage = new Image();
@@ -35,7 +36,8 @@ class GameObject {
     this.keyStatus = {
       isLeftUp: false,
       isRightUp: false,
-      isEnter: false
+      isEnter: false,
+      isEsc: false
     }
     this.blocks = [];
     this.gameStatus = 'title'; 
@@ -69,10 +71,17 @@ class GameObject {
         block.draw(this.ctx)
       }
     })
+    // Escが押されたらタイトルに戻る
+    if(this.keyStatus.isEsc) {
+      this.gameStatus = 'title';
+    }
   }
 
   resetGame() {
     // 初期設定
+    this.ball.reset(200, 200);
+    this.bar.reset();
+    this.blocks = [];
     for(let y=0; y<3; y++) {
       for(let x=0; x<10; x++) {
         this.blocks.push(

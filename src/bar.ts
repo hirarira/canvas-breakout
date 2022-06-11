@@ -33,6 +33,11 @@ class Bar {
       this.x -= 10;
     }
   }
+
+  reset() {
+    this.x = 300;
+    this.y = 670;
+  }
   
   /**
    * ボールとバーの当たり判定

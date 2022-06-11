@@ -44,6 +44,13 @@ class Ball {
   draw(ctx: any) {
     ctx.drawImage(this.image, 0, 0, this.ballSize, this.ballSize, this.x, this.y , this.ballSize, this.ballSize);
   }
+
+  reset(init_x: number, init_y: number) {
+    this.x = init_x;
+    this.y = init_y;
+    this.vx = 6;
+    this.vy = 4;
+  }
 }
 
 export default Ball;
