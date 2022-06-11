@@ -6,6 +6,7 @@ class Ball {
   windowSize: number;
   ballSize: number;
   image: HTMLImageElement;
+  isExist: boolean;
 
   constructor(init_x: number, init_y: number, windowSize: number) {
     this.x = init_x;
@@ -16,6 +17,7 @@ class Ball {
     this.ballSize = 20;
     this.image = new Image();
     this.image.src = './img/ball.png';
+    this.isExist = true;
   }
 
   frameChamge() {
@@ -28,17 +30,18 @@ class Ball {
       }
       this.vx *= -1;
     }
-    if(this.y < 0 || this.y > this.windowSize - this.ballSize) {
-      if(this.vy > 0) {
-        this.y = this.windowSize - this.ballSize
-      }
-      else {
-        this.y = 0;
-      }
+    if(this.y < 0) {
+      this.y = 0;
       this.vy *= -1;
     }
-    this.x += this.vx;
-    this.y += this.vy;
+    // 奈落に落ちた場合にはボールを消滅させる
+    if(this.y > this.windowSize) {
+      this.isExist = false;
+    }
+    if(this.isExist) {
+      this.x += this.vx;
+      this.y += this.vy;
+    }
   }
 
   draw(ctx: any) {
@@ -46,6 +49,7 @@ class Ball {
   }
 
   reset(init_x: number, init_y: number) {
+    this.isExist = true;
     this.x = init_x;
     this.y = init_y;
     this.vx = 6;

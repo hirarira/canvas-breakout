@@ -57,6 +57,9 @@ class GameObject {
         block.blockToBall(this.ball);
       }
     })
+    if(!this.ball.isExist) {
+      this.gameStatus = 'gameover';
+    }
     this.playingDraw();
   }
 
@@ -103,6 +106,17 @@ class GameObject {
       this.gameStatus = 'playing';
     }
   }
+
+  gameOver() {
+    this.playingDraw();
+    this.ctx.font = '48px serif';
+    this.ctx.fillText('GameOver', 250, 300);
+    this.ctx.fillText('Enterでリトライ', 250, 400);
+    if(this.keyStatus.isEnter) {
+      this.resetGame();
+      this.gameStatus = 'playing';
+    }
+  }
   
   main() {
     switch(this.gameStatus) {
@@ -111,6 +125,9 @@ class GameObject {
         break;
       case 'playing':
         this.playing();
+        return;
+      case 'gameover':
+        this.gameOver();
         return;
     }
   }
