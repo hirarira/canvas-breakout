@@ -20,9 +20,21 @@ class Ball {
 
   frameChamge() {
     if(this.x < 0 || this.x > this.windowSize - this.ballSize) {
+      if(this.vx > 0) {
+        this.x = this.windowSize - this.ballSize
+      }
+      else {
+        this.x = 0;
+      }
       this.vx *= -1;
     }
     if(this.y < 0 || this.y > this.windowSize - this.ballSize) {
+      if(this.vy > 0) {
+        this.y = this.windowSize - this.ballSize
+      }
+      else {
+        this.y = 0;
+      }
       this.vy *= -1;
     }
     this.x += this.vx;

@@ -2,6 +2,8 @@ import Ball from "./ball";
 import Bar from "./bar";
 import Block from "./block";
 
+type GameStatus = 'title' | 'playing' | 'gameover';
+
 class GameObject {
   canvas: HTMLElement;
   ctx: any;
@@ -14,9 +16,11 @@ class GameObject {
   backgroundImage: HTMLImageElement;
   keyStatus: {
     isLeftUp: boolean,
-    isRightUp: boolean
+    isRightUp: boolean,
+    isEnter: boolean
   }
   blocks: Block[];
+  gameStatus: GameStatus;
 
   constructor() {
     const canvas: any = document.getElementById('canvas');
@@ -30,12 +34,14 @@ class GameObject {
     this.backgroundImage.src = './img/sea.jpg';
     this.keyStatus = {
       isLeftUp: false,
-      isRightUp: false
+      isRightUp: false,
+      isEnter: false
     }
     this.blocks = [];
+    this.gameStatus = 'title'; 
   }
 
-  frame() {
+  playing() {
     if(this.keyStatus.isRightUp) {
       this.bar.moveRight();
     }
@@ -49,10 +55,10 @@ class GameObject {
         block.blockToBall(this.ball);
       }
     })
-    this.draw();
+    this.playingDraw();
   }
 
-  draw() {
+  playingDraw() {
     this.ctx.clearRect(0, 0, this.windowSize, this.windowSize);
     this.ctx.beginPath();
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.windowSize, this.windowSize, 0, 0, this.windowSize, this.windowSize);
@@ -65,7 +71,7 @@ class GameObject {
     })
   }
 
-  start() {
+  resetGame() {
     // 初期設定
     for(let y=0; y<3; y++) {
       for(let x=0; x<10; x++) {
@@ -74,7 +80,34 @@ class GameObject {
         );
       }
     }
-    this.timerID = setInterval(this.frame.bind(this), (1000/this.fps));
+  }
+
+  title() {
+    this.ctx.clearRect(0, 0, this.windowSize, this.windowSize);
+    this.ctx.beginPath();
+    this.ctx.drawImage(this.backgroundImage, 0, 0, this.windowSize, this.windowSize, 0, 0, this.windowSize, this.windowSize);
+    this.ctx.font = '48px serif';
+    this.ctx.fillText('ブロック崩し', 250, 300);
+    this.ctx.fillText('Enterで開始', 250, 400);
+    if(this.keyStatus.isEnter) {
+      this.resetGame();
+      this.gameStatus = 'playing';
+    }
+  }
+  
+  main() {
+    switch(this.gameStatus) {
+      case 'title':
+        this.title();
+        break;
+      case 'playing':
+        this.playing();
+        return;
+    }
+  }
+
+  start() {
+    this.timerID = setInterval(this.main.bind(this), (1000/this.fps));
   }
 }
 
