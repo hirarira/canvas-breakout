@@ -60,6 +60,10 @@ class GameObject {
     if(!this.ball.isExist) {
       this.gameStatus = 'gameover';
     }
+    // Escが押されたらタイトルに戻る
+    if(this.keyStatus.isEsc) {
+      this.gameStatus = 'title';
+    }
     this.playingDraw();
   }
 
@@ -74,10 +78,6 @@ class GameObject {
         block.draw(this.ctx)
       }
     })
-    // Escが押されたらタイトルに戻る
-    if(this.keyStatus.isEsc) {
-      this.gameStatus = 'title';
-    }
   }
 
   resetGame() {
