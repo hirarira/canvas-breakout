@@ -44,6 +44,11 @@ class GameObject {
     }
     this.ball.frameChamge();
     this.bar.barToBall(this.ball);
+    this.blocks.forEach((block: Block) => {
+      if(block.isExist) {
+        block.blockToBall(this.ball);
+      }
+    })
     this.draw();
   }
 
@@ -53,8 +58,10 @@ class GameObject {
     this.ctx.drawImage(this.backgroundImage, 0, 0, this.windowSize, this.windowSize, 0, 0, this.windowSize, this.windowSize);
     this.ball.draw(this.ctx);
     this.bar.draw(this.ctx);
-    this.blocks.forEach((x)=>{
-      x.draw(this.ctx)
+    this.blocks.forEach((block: Block)=>{
+      if(block.isExist) {
+        block.draw(this.ctx)
+      }
     })
   }
 
