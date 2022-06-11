@@ -35,24 +35,6 @@ class GameObject {
     this.blocks = [];
   }
 
-  /**
-   * ボールとバーの当たり判定
-   * @param ball 
-   */
-  barToBall(ball: Ball) {
-    const isOverX = (ball.x + ball.ballSize) > this.bar.x && ball.x < (this.bar.x + this.bar.barWidth);
-    const isOverY = (ball.y + ball.ballSize) > this.bar.y && ball.y < (this.bar.y + this.bar.barHeight);
-    if(isOverX && isOverY) {
-      if(ball.vy > 0) {
-        ball.y = this.bar.y - ball.ballSize;
-      }
-      else {
-        ball.y = this.bar.y + this.bar.barHeight;
-      }
-      ball.vy *= -1;
-    }
-  }
-
   frame() {
     if(this.keyStatus.isRightUp) {
       this.bar.moveRight();
@@ -61,7 +43,7 @@ class GameObject {
       this.bar.moveLeft();
     }
     this.ball.frameChamge();
-    this.barToBall(this.ball);
+    this.bar.barToBall(this.ball);
     this.draw();
   }
 

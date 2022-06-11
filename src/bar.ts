@@ -1,3 +1,5 @@
+import Ball from "./ball";
+
 class Bar {
   x: number;
   y: number;
@@ -29,6 +31,24 @@ class Bar {
   moveLeft() {
     if(this.x > 0) {
       this.x -= 10;
+    }
+  }
+  
+  /**
+   * ボールとバーの当たり判定
+   * @param ball 
+   */
+   barToBall(ball: Ball) {
+    const isOverX = (ball.x + ball.ballSize) > this.x && ball.x < (this.x + this.barWidth);
+    const isOverY = (ball.y + ball.ballSize) > this.y && ball.y < (this.y + this.barHeight);
+    if(isOverX && isOverY) {
+      if(ball.vy > 0) {
+        ball.y = this.y - ball.ballSize;
+      }
+      else {
+        ball.y = this.y + this.barHeight;
+      }
+      ball.vy *= -1;
     }
   }
 
