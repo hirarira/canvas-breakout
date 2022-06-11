@@ -21,10 +21,10 @@ class Ball {
   }
 
   frameChamge() {
-    if(this.x < 10 || this.x > this.windowSize - 10) {
+    if(this.x < 0 || this.x > this.windowSize - this.ballSize) {
       this.vx *= -1;
     }
-    if(this.y < 10 || this.y > this.windowSize - 10) {
+    if(this.y < 0 || this.y > this.windowSize - this.ballSize) {
       this.vy *= -1;
     }
     this.x += this.vx;
@@ -32,7 +32,7 @@ class Ball {
   }
 
   draw(ctx: any) {
-    ctx.drawImage(this.image, 0, 0, this.ballSize, this.ballSize, this.x - (this.ballSize/2), this.y - (this.ballSize/2), this.ballSize, this.ballSize);
+    ctx.drawImage(this.image, 0, 0, this.ballSize, this.ballSize, this.x, this.y , this.ballSize, this.ballSize);
   }
 }
 
