@@ -12,8 +12,8 @@ class Ball {
   constructor(init_x: number, init_y: number, windowSize: number) {
     this.x = init_x;
     this.y = init_y;
-    this.vx = 5;
-    this.vy = 2;
+    this.vx = 6;
+    this.vy = 4;
     this.windowSize = windowSize;
     this.ballSize = 20;
     this.image = new Image();
@@ -42,11 +42,13 @@ class Bar {
   ballSize: number;
   image: HTMLImageElement;
   windowSize: number;
-  barWidth: number
+  barHeight: number;
+  barWidth: number;
 
   constructor(windowSize: number) {
     this.x = 300;
-    this.y = 720;
+    this.y = 670;
+    this.barHeight = 30;
     this.barWidth = 200;
     this.windowSize = windowSize;
     this.image = new Image();
@@ -54,7 +56,7 @@ class Bar {
   }
 
   draw(ctx: any) {
-    ctx.drawImage(this.image, 0, 0, this.barWidth, 30, this.x, this.y, this.barWidth, 30);
+    ctx.drawImage(this.image, 0, 0, this.barWidth, this.barHeight, this.x, this.y, this.barWidth, this.barHeight);
   }
 
   moveRight() {
@@ -102,14 +104,33 @@ class GameObject {
     }
   }
 
+  /**
+   * ボールとバーの当たり判定
+   * @param ball 
+   */
+  barToBall(ball: Ball) {
+    const isOverX = (ball.x + ball.ballSize) > this.bar.x && ball.x < (this.bar.x + this.bar.barWidth);
+    const isOverY = (ball.y + ball.ballSize) > this.bar.y && ball.y < (this.bar.y + this.bar.barHeight);
+    if(isOverX && isOverY) {
+      if(ball.vy > 0) {
+        ball.y = this.bar.y - ball.ballSize;
+      }
+      else {
+        ball.y = this.bar.y + this.bar.barHeight;
+      }
+      ball.vy *= -1;
+    }
+  }
+
   frame() {
-    this.ball.frameChamge();
     if(this.keyStatus.isRightUp) {
       this.bar.moveRight();
     }
     if(this.keyStatus.isLeftUp) {
       this.bar.moveLeft();
     }
+    this.ball.frameChamge();
+    this.barToBall(this.ball);
     this.draw();
   }
 
